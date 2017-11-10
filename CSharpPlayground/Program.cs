@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Globalization;
+using System.Numerics;
 
 namespace CSharpPlayground
 {
     class Program
     {
-        static void Main(string[] args)
+        static void bind()
         {
             //explicit create bind
             BinderHelper<int, int, int> directAplusB = ((int a, int b) => a + b);
@@ -13,7 +14,7 @@ namespace CSharpPlayground
             //implicit create bind with Helper func
             var AopB = BinderHelper.ConvertFuncAsBinder((int a, Func<int, int, int> op, int c) => op(a, c));
 
-            BinderHelper<Func<int, int>, Func<int, int>, BinderHelper<int, Func<int, int, int>, int, int>> 
+            BinderHelper<Func<int, int>, Func<int, int>, BinderHelper<int, Func<int, int, int>, int, int>>
                 bind = (a, b) => (a1, op, b1) => op(a(a1), b(b1));
 
             var func = bind.BindT1(a => a + 1).BindT1(a => a + 2)();
@@ -28,6 +29,11 @@ namespace CSharpPlayground
             Console.WriteLine(plusFunc(1, 2));
             // (3 + 1) * (4 + 2) == 4 * 6 == 24
             Console.WriteLine(mulFunc(3, 4));
+        }
+
+        static void Main(string[] args)
+        {
+
 
         }
     }
