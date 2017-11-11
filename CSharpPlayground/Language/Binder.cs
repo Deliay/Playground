@@ -13,8 +13,6 @@ namespace CSharpPlayground
 
     static class BinderHelper
     {
-        public static Func<T1, Func<T2, Func<T3, Func<T4, Func<T5, Func<T6, Func<T7, Func<T8, Func<T9, TR>>>>>>>>> Curry<T1, T2, T3, T4, T5, T6, T7, T8, T9, TR>(this Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, TR> func) { return p1 => p2 => p3 => p4 => p5 => p6 => p7 => p8 => p9 => func(p1, p2, p3, p4, p5, p6, p7, p8, p9); }
-
         public static Binder<T1, T2, T3, T4, T5> ConvertFuncAsBinder<T1, T2, T3, T4, T5>(BinderHelper<T1, T2, T3, T4, T5> src) => src;
         public static Binder<T1, T2, T3, T4> ConvertFuncAsBinder<T1, T2, T3, T4>(BinderHelper<T1, T2, T3, T4> src) => src;
         public static Binder<T1, T2, T3> ConvertFuncAsBinder<T1, T2, T3>(BinderHelper<T1, T2, T3> src) => src;
