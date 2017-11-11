@@ -98,7 +98,7 @@ namespace CSharpPlayground
             ParallelTaskPool test = new ParallelTaskPool();
             SingleThreadExecuteTaskPool singleThreadPool = new SingleThreadExecuteTaskPool();
 
-            //在新线程中测试并行线程池
+            //在新线程中测试并行任务池
             Thread parallel = new Thread(() =>
             {
                 
@@ -108,54 +108,58 @@ namespace CSharpPlayground
                     test.PutTask(() => Console.Write($"{parallel_value++},"));
                 }
                 test.Start();
-                Console.WriteLine();
+                Console.WriteLine("\n=================================END PARALLEL");
             });
 
-            //在新线程中测试延时线程池
+            //在新线程中测试延时任务池
             Thread delay = new Thread(() =>
             {
-                int value = 0;
+                int delay_value = 0;
                 for (int i = 0; i < 20; i++)
                 {
-                    singleThreadDelayPool.PutTask(() => Console.Write($"{value++},"));
+                    singleThreadDelayPool.PutTask(() => Console.Write($"{delay_value++},"));
                 }
+                Console.WriteLine("\n=================================END DELAY1");
             });
 
-            //在新线程中测试顺序线程池
+            //在新线程中测试顺序任务池
             Thread index = new Thread(() =>
             {
-                int value = 0;
-                Console.WriteLine();
+                int index_value = 0;
                 for (int i = 0; i < 100; i++)
                 {
-                    singleThreadPool.PutTask(() => Console.Write($"{value++},"));
+                    singleThreadPool.PutTask(() => Console.Write($"{index_value++},"));
                 }
+                Console.WriteLine("\n=================================END INDEX1");
             });
 
             //测试自旋锁排队
             Thread index2 = new Thread(() =>
             {
-                int value = 100;
-                Console.WriteLine();
+                int index_value2 = 100;
                 for (int i = 0; i < 100; i++)
                 {
-                    singleThreadPool.PutTask(() => Console.Write($"{value++},"));
+                    singleThreadPool.PutTask(() => Console.Write($"{index_value2++},"));
                 }
+                Console.WriteLine("\n=================================END INDEX2");
             });
 
             //测试自旋锁延迟排队
             Thread delay2 = new Thread(() =>
             {
-                int value = 0;
-                for (int i = 0; i < 20; i++)
+                int delay_value2 = 0;
+                for (int j = 0; j < 20; j++)
                 {
-                    singleThreadDelayPool.PutTask(() => Console.Write($"{value++},"));
+                    singleThreadDelayPool.PutTask(() => Console.Write($"{delay_value2++},"));
                 }
+                //排队完成后，再执行并行任务池
+                Console.WriteLine("\n=================================END DELAY2");
+                parallel.Start();
             });
 
+            //并不确定先执行哪个，但是会排队
             index.Start();
             delay.Start();
-            parallel.Start();
             delay2.Start();
             index2.Start();
         }
