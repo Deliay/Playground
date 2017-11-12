@@ -1,6 +1,7 @@
 ﻿using CSharpPlayground.Library;
 using System;
 using System.Globalization;
+using System.Linq;
 using System.Numerics;
 using System.Threading;
 
@@ -166,7 +167,9 @@ namespace CSharpPlayground
 
         static void Main(string[] args)
         {
-            taskpool();
+            var j = Enumerable.Range(0, 10);
+            Console.WriteLine(j.LengthL());
+            Console.WriteLine(j.LengthR());
 
         }
     }
