@@ -4,14 +4,28 @@ using System.Text;
 
 namespace CSharpPlayground.Library
 {
+    /// <summary>
+    /// Flag the undoable object to constraint pass the literal value must box.
+    /// </summary>
     interface IUndoable { }
 
+    /// <summary>
+    /// Base undoable Action class
+    /// <para>Implement two base method for <see cref="ActionBin"/> TypeEarse call</para>
+    /// </summary>
     internal abstract class UndoableAction
     {
+        /// <summary>
+        /// Call on Undo request
+        /// </summary>
         public abstract void Revert();
         public abstract void Apply();
     }
 
+    /// <summary>
+    /// A GenericBase layer to fetch sub-generic-class infomation
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     internal abstract class UndoableAction<T> : UndoableAction
     {
         static Type[] types;
@@ -20,12 +34,12 @@ namespace CSharpPlayground.Library
             types = typeof(T).GetGenericArguments();
         }
 
-        public static Type GetTargetObjecType()
+        public Type GetTargetObjecType()
         {
             return types[0];
         }
 
-        public static Type GetArgumentType()
+        public Type GetArgumentType()
         {
             return types[1];
         }
