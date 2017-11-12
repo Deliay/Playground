@@ -69,8 +69,11 @@ namespace CSharpPlayground
             ActionBin history = new ActionBin();
 
             Integer a = 0;
+            Console.WriteLine(a);
             history.Do<Integer, int>(new PlusNumber(a, 5));
+            Console.WriteLine(a);
             history.Do<Integer, int>(new PlusNumber(a, 10));
+            Console.WriteLine(a);
             history.Do<Integer, int>(new PlusNumber(a, 2));
             Console.WriteLine(a);
 
@@ -105,7 +108,7 @@ namespace CSharpPlayground
                 int parallel_value = 0;
                 for (int i = 0; i < 100; i++)
                 {
-                    test.PutTask(() => Console.Write($"{parallel_value++},"));
+                    test.PutTask(() => Console.Write($"P-{parallel_value++},"));
                 }
                 test.Start();
                 Console.WriteLine("\n=================================END PARALLEL");
@@ -115,9 +118,9 @@ namespace CSharpPlayground
             Thread delay = new Thread(() =>
             {
                 int delay_value = 0;
-                for (int i = 0; i < 20; i++)
+                for (int i = 0; i < 50; i++)
                 {
-                    singleThreadDelayPool.PutTask(() => Console.Write($"{delay_value++},"));
+                    singleThreadDelayPool.PutTask(() => Console.Write($"D-{delay_value++},"));
                 }
                 Console.WriteLine("\n=================================END DELAY1");
             });
@@ -128,7 +131,7 @@ namespace CSharpPlayground
                 int index_value = 0;
                 for (int i = 0; i < 100; i++)
                 {
-                    singleThreadPool.PutTask(() => Console.Write($"{index_value++},"));
+                    singleThreadPool.PutTask(() => Console.Write($"I-{index_value++},"));
                 }
                 Console.WriteLine("\n=================================END INDEX1");
             });
@@ -139,7 +142,7 @@ namespace CSharpPlayground
                 int index_value2 = 100;
                 for (int i = 0; i < 100; i++)
                 {
-                    singleThreadPool.PutTask(() => Console.Write($"{index_value2++},"));
+                    singleThreadPool.PutTask(() => Console.Write($"I2-{index_value2++},"));
                 }
                 Console.WriteLine("\n=================================END INDEX2");
             });
@@ -148,9 +151,9 @@ namespace CSharpPlayground
             Thread delay2 = new Thread(() =>
             {
                 int delay_value2 = 0;
-                for (int j = 0; j < 20; j++)
+                for (int j = 0; j < 50; j++)
                 {
-                    singleThreadDelayPool.PutTask(() => Console.Write($"{delay_value2++},"));
+                    singleThreadDelayPool.PutTask(() => Console.Write($"D-{delay_value2++},"));
                 }
                 //排队完成后，再执行并行任务池
                 Console.WriteLine("\n=================================END DELAY2");
@@ -158,15 +161,16 @@ namespace CSharpPlayground
             });
 
             //并不确定先执行哪个，但是会排队
+
+            index2.Start();
             index.Start();
             delay.Start();
             delay2.Start();
-            index2.Start();
         }
 
         static void Main(string[] args)
         {
-            taskpool();
+            undoredo();
 
         }
     }
