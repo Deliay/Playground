@@ -9,6 +9,9 @@ namespace CSharpPlayground
 {
     class Program
     {
+        /// <summary>
+        /// Bind functor and get high order function
+        /// </summary>
         static void bind()
         {
             //explicit create bind
@@ -65,6 +68,9 @@ namespace CSharpPlayground
             }
         }
 
+        /// <summary>
+        /// stack and queued undo/redo pool
+        /// </summary>
         static void undoredo()
         {
             ActionBin history = new ActionBin();
@@ -90,6 +96,9 @@ namespace CSharpPlayground
             Console.WriteLine(a);
         }
 
+        /// <summary>
+        /// Task pool, task in pool will in order to run 
+        /// </summary>
         static void taskpool()
         {
             //共用的Task池
@@ -169,9 +178,34 @@ namespace CSharpPlayground
             delay2.Start();
         }
 
+        class 去幼儿园 : IBaseEvent
+        {
+            public DateTime 发车时间 = DateTime.Now;
+        }
+
+        class 上车 : BaseEventDispatcher<去幼儿园>
+        {
+            public DateTime 始发时间 = DateTime.Now;
+        }
+
+        /// <summary>
+        /// Install a event dispathcer to a class extend <see cref="BaseEventDispatcher{T}"/>
+        /// </summary>
+        static void eventbus()
+        {
+            EventDispatcher.Instance.RegisterNewDispatcher<上车, 去幼儿园>();
+            上车 早班车 = new 上车();
+            早班车.BindEvent<去幼儿园>((进站) => { Console.WriteLine(进站.发车时间); });
+
+            Console.WriteLine(早班车.始发时间);
+            Thread.Sleep(3000);
+            早班车.RaiseEvent(new 去幼儿园());
+
+        }
+
         static void Main(string[] args)
         {
-            taskpool();
+            eventbus();
 
         }
     }

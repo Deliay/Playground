@@ -15,6 +15,19 @@ namespace CSharpPlayground.Library
 
         public static int LengthR<A>(this IEnumerable<A> xs) => foldr((a, x) => x + 1, 0, xs);
 
+        public static A Compimum<A>(this IEnumerable<A> xs, Func<A, A, A> compare) => xs.Count() == 0 ? default(A) : foldr(compare, xs.First(), xs.Skip(1));
 
+        public static IEnumerable<B> map<A, B>(Func<A, B> λ, IEnumerable<A> xs) => xs.Select(λ);
+
+        public static IEnumerable<A> filter<A>(Func<A, bool> λ, IEnumerable<A> xs) => xs.Where(λ);
+
+        public static IEnumerable<B> scanl<A, B>(Func<B, A, B> λ, B δ, IEnumerable<A> xs) => Enumerable.Append(default(IEnumerable<B>), δ).Union(scanl(λ, λ(δ, xs.First()), xs.Skip(1)));
+
+        public static IEnumerable<B> scanr<A, B>(Func<A, B, B> λ, B δ, IEnumerable<A> xs)
+        {
+            if (xs.Count() == 0) return Enumerable.Append(default(IEnumerable<B>), δ);
+            var ys = scanr(λ, δ, xs);
+            return Enumerable.Append(default(IEnumerable<B>), λ(xs.First(), ys.First())).Union(ys);
+        }
     }
 }
